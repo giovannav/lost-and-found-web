@@ -48,3 +48,6 @@ C:\Users\giova\OneDrive\Documentos\8 semestre\desenvolvimento web 2\2022-09-20\a
 C:\Users\giova\OneDrive\Documentos\8 semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\achei-web.dll
 C:\Users\giova\OneDrive\Documentos\8 semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\achei-web.pdb
 C:\Users\giova\OneDrive\Documentos\8 semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\achei-web.genruntimeconfig.cache
+C:\Users\giova\OneDrive\Documentos\8 semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Aluno\Cadastro.cshtml.g.cs
+C:\Users\giova\OneDrive\Documentos\8 semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Aluno\Index.cshtml.g.cs
+C:\Users\giova\OneDrive\Documentos\8 semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Aluno\Login.cshtml.g.cs
