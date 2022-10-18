@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\giova\\OneDrive\\Documentos\\8 semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\achei-web.csproj": {}
+    "C:\\Users\\giova\\OneDrive\\Documentos\\8semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\achei-web.csproj": {}
   },
   "projects": {
-    "C:\\Users\\giova\\OneDrive\\Documentos\\8 semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\achei-web.csproj": {
+    "C:\\Users\\giova\\OneDrive\\Documentos\\8semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\achei-web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\giova\\OneDrive\\Documentos\\8 semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\achei-web.csproj",
+        "projectUniqueName": "C:\\Users\\giova\\OneDrive\\Documentos\\8semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\achei-web.csproj",
         "projectName": "achei-web",
-        "projectPath": "C:\\Users\\giova\\OneDrive\\Documentos\\8 semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\achei-web.csproj",
+        "projectPath": "C:\\Users\\giova\\OneDrive\\Documentos\\8semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\achei-web.csproj",
         "packagesPath": "C:\\Users\\giova\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\giova\\OneDrive\\Documentos\\8 semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\obj\\",
+        "outputPath": "C:\\Users\\giova\\OneDrive\\Documentos\\8semestre\\desenvolvimento web 2\\2022-09-20\\achei-web\\achei-web\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -47,6 +47,10 @@
             "MySql.Data": {
               "target": "Package",
               "version": "[8.0.30, )"
+            },
+            "Newtonsoft.Json.Bson": {
+              "target": "Package",
+              "version": "[1.0.2, )"
             }
           },
           "imports": [

@@ -24,6 +24,12 @@ namespace achei_web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // Adicionando sessão
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +47,9 @@ namespace achei_web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            // Adicionar sessão
+            app.UseSession();
 
             app.UseRouting();
 

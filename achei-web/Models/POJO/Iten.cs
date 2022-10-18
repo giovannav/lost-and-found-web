@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace achei_web.Models.POJO
 {
-    public class Item
+    public class Iten
     {
         public int id { get; set; } = 0;
-        public string nome { get; set; } = string.Empty;
-        public string descricao { get; set; } = string.Empty;
-        public DateTime data_achado { get; set; } = DateTime.Now;
+        public string name { get; set; } = string.Empty;
+        public string description { get; set; } = string.Empty;
+        public DateTime date_found { get; set; } = DateTime.Now;
         public bool status { get; set; } = false;
 
         public IFormFile ImageFile { get; set; } = null;

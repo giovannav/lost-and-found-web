@@ -12,7 +12,7 @@ namespace achei_web.Models.DAO
 
         public MySqlConnection OpenConnection()
         {
-            Conn = new MySqlConnection("server=127.0.0.1;database=mydb;uid=root;pwd=admin;convert zero datetime=True");
+            Conn = new MySqlConnection("server=127.0.0.1;database=lostandfound;uid=root;pwd=admin;convert zero datetime=True");
             // convert zero datetime=True --> Usado para permitir receber o datetime do mysql no datetime do c#
             Conn.Open();
             return Conn;
