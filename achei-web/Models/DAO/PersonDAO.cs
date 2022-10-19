@@ -91,15 +91,16 @@ namespace achei_web.Models.DAO
             return listPerson;
         }
 
-        public bool authenticate(Person person)
+        public Person authenticate(Person person)
         {
             bool email_correct = false;
             bool password_correct = false;
             List<Person> listObj = new List<Person>();
             listObj = selectObject("");
-
+            int index = 0;
             foreach (var user in listObj)
             {
+                index++;
                 if (person.email.Equals(user.email))// (objC.email == user.email)
                 {
                     email_correct = true;
@@ -116,9 +117,9 @@ namespace achei_web.Models.DAO
             }
             if (email_correct == true && password_correct == true)
             {
-                return true;
+                return listObj[index-1];
             }
-            return false;
+            return null;
         }
 
     }

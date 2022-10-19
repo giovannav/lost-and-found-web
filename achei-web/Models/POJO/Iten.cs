@@ -14,6 +14,7 @@ namespace achei_web.Models.POJO
         public DateTime date_found { get; set; } = DateTime.Now;
         public bool status { get; set; } = false;
 
+        public string student_record { get; set; } = string.Empty;
         public IFormFile ImageFile { get; set; } = null;
 
         public string image_name { get; set; } = string.Empty;

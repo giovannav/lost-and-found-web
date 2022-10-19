@@ -40,7 +40,10 @@ namespace achei_web.Controllers
         [HttpPost]
         [Route("Registration")]
         public IActionResult Registration(Student student)
+        
         {
+            //Course course = new Course();
+            //student.course.id = 1;
             StudentDAO studentDAO = new StudentDAO();
             studentDAO.insert(student);
             return RedirectToAction("Login");
@@ -70,10 +73,12 @@ namespace achei_web.Controllers
         public IActionResult Login(Person person)
         {
             PersonDAO personDAO = new PersonDAO();
-            if (personDAO.authenticate(person))
+            Person authenticate = personDAO.authenticate(person);
+            if (authenticate != null)
             {
-                HttpContext.Session.SetString("StudentSession", JsonConvert.SerializeObject(person));
-                return RedirectToAction("Index");
+                HttpContext.Session.SetString("StudentSession", JsonConvert.SerializeObject(authenticate));
+                return this.RedirectToAction("List", "Iten");
+                //return RedirectToAction("Index");
             }
             return View();
         }

@@ -4,4 +4,47 @@
 
 @model Tuple<List<achei_web.Models.POJO.Person>, achei_web.Models.POJO.Person>
 
-<h3>Olá, @Model.Item2.email!</h3>
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Login</title>
+    <style>
+        body {
+            background-color: rgb(255, 246, 229);
+        }
+
+        .logo {
+            max-width: 30%;
+            max-height: 30%;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="tela_login_aluno.html">Tapt!</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">Index aluno</a>
+                    @*<a class="nav-link" href="tela_login_aluno.html">Index</a>*@
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Iten" asp-action="Create">Novo item</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Iten" asp-action="List">Iten</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <h3>Olá, @Model.Item2.email!</h3>
+    <a asp-area="" asp-controller="Iten" asp-action="Create">Novo item</a>
+</body>
+</html>

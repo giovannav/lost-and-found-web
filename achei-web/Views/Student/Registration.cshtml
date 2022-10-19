@@ -107,14 +107,15 @@
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="course">Curso</label>
-                                                <select name="course" id="course">
-                                                    @{ 
+                                                @*<input type="number" id="course.id" name="course.id" class="form-control" />*@
+                                                <select name="course.id" id="course.id">
+                                                    @{
                                                         foreach (var course in Model.Item1)
                                                         {
-                                                            <option value=@course.id>@course.name - @course.course_time</option>
+                                                            <option value="@course.id" id="course.id" name="course.id">@course.name - @course.course_time</option>
                                                         }
-                                                     }
-                                                </select>     
+                                                    }
+                                                </select>
                                             </div>
                                         </div> 
                                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">

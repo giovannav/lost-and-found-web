@@ -106,3 +106,6 @@ C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\ac
 C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Student\Registration.cshtml.g.cs
 C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Iten\Create.cshtml.g.cs
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Iten\List.cshtml.g.cs
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Iten\Read.cshtml.g.cs
