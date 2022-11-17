@@ -12,7 +12,7 @@ namespace achei_web.Models.POJO
         public string name { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;
         public DateTime date_found { get; set; } = DateTime.Now;
-        public bool status { get; set; } = false;
+        public int status { get; set; } = 0;
 
         public string student_record { get; set; } = string.Empty;
         public IFormFile ImageFile { get; set; } = null;

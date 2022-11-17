@@ -2,7 +2,7 @@
     Layout = null;
 }
 
-@model Tuple<List<achei_web.Models.POJO.Person>, achei_web.Models.POJO.Person, List<achei_web.Models.POJO.Iten>>
+@model Tuple<List<achei_web.Models.POJO.Student>, achei_web.Models.POJO.Person, List<achei_web.Models.POJO.Iten>>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +55,6 @@
         <a class="nav-link text-dark" asp-area="" asp-controller="Iten" asp-route-id="@Model.Item2.id" asp-action="Create">Criar item</a>
         <div class="row">
             <!--Início card-->
-
             <!--Fim card-->
             <!--Início card-->
             @{
@@ -77,6 +76,13 @@
                                 <h3 class="heading">@iten.name</h3>
                                 <div class="d-flex flex-row align-items-center justify-content-center">
                                     <a type="button" class="btn btn-primary" asp-area="" asp-controller="Iten" asp-route-id="@iten.id" asp-action="Read">Ver mais</a>
+
+                                    @{
+                                        if (@Model.Item1[0].student_record == @iten.student_record)
+                                        {
+                                            <a type="button" class="btn btn-primary ml-4" asp-area="" asp-controller="Iten" asp-route-id="@iten.id" asp-action="Update">Editar</a>
+                                        }
+                                    }
                                     @*<a href="pagina_item.html" type="button" class="btn btn-primary">Ver mais</a>*@
                                 </div>
                             </div>

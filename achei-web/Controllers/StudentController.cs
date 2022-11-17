@@ -59,10 +59,14 @@ namespace achei_web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            PersonDAO objCDAO = new PersonDAO();
+            StudentDAO objCDAO = new StudentDAO();
 
             // Get sessão
             var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
+
+            //Get SessionID inside Controller.
+            TempData["StudentSession"] = HttpContext.Session.Id;
+            
             var tuple = Tuple.Create(objCDAO.selectObject(""), person);
             return View(tuple);
             //return View();
@@ -70,10 +74,10 @@ namespace achei_web.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public IActionResult Login(Person person)
+        public IActionResult Login(Student student)
         {
-            PersonDAO personDAO = new PersonDAO();
-            Person authenticate = personDAO.authenticate(person);
+            StudentDAO studentDAO = new StudentDAO();
+            Person authenticate = studentDAO.authenticate(student);
             if (authenticate != null)
             {
                 HttpContext.Session.SetString("StudentSession", JsonConvert.SerializeObject(authenticate));
