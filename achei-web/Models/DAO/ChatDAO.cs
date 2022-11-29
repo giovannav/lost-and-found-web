@@ -9,7 +9,7 @@ namespace achei_web.Models.DAO
 {
     public class ChatDAO
     {
-        public object insert(Room room, int id)
+        public int insert(Room room, int id)
         {
 
             int first_user_id = room.first_user_id;
@@ -30,6 +30,7 @@ namespace achei_web.Models.DAO
                 command1.Connection = Conn;
                 command1.Transaction = tran;
                 userNameObj = command1.ExecuteScalar();
+              //  last_insert_room = Int32.Parse(userNameObj.ToString());
                 tran.Commit();
                 connection.CloseConnection();
 
@@ -60,18 +61,23 @@ namespace achei_web.Models.DAO
                     tran.Commit();
                     connection.CloseConnection();
                 }
+                else
+                {
+                    last_insert_room = Int32.Parse(userNameObj.ToString());
+                }
             }
             catch (Exception ex)
             {
                 String erro = ex.InnerException + ex.Message;
                 erro += ex.StackTrace;
             }
-            return userNameObj;
+            return last_insert_room;
         }
 
-        public int insertMessage(Message message)
+        public void insertMessage(Message message)
         {
-            int room_id = 0;
+            int iten_id = 0;
+            string query;
             Connection connection = new Connection();
             MySqlConnection Conn = new MySqlConnection();
             MySqlTransaction tran;
@@ -91,7 +97,31 @@ namespace achei_web.Models.DAO
                 command2.CommandText = "SELECT iten_id FROM iten_has_room WHERE room_id = "+message.room_id+";";
                 command2.Connection = Conn;
                 command2.Transaction = tran;
-                room_id = Int32.Parse(command2.ExecuteScalar().ToString());
+                iten_id = Int32.Parse(command2.ExecuteScalar().ToString());
+
+                // Select iten owner
+                ItenDAO itenDAO = new ItenDAO();
+                int owner_id = itenDAO.selectItenOwner(iten_id);
+
+                if (owner_id == message.id_user)
+                {
+                    MySqlCommand command3 = Conn.CreateCommand();
+                    command3.CommandText = "SELECT second_user_id FROM room WHERE id_room = " + message.room_id + ";";
+                    command3.Connection = Conn;
+                    command3.Transaction = tran;
+                    int to_user = Int32.Parse(command3.ExecuteScalar().ToString());
+                    query = "INSERT INTO notification (id_to_user, id_from_user, id_room, id_iten, is_read, date_send) values (" + to_user + ", " + message.id_user + ", " + message.room_id + ", " + iten_id + ", 0, current_timestamp());";
+                }
+                else
+                {
+                    query = "INSERT INTO notification (id_to_user, id_from_user, id_room, id_iten, is_read, date_send) values (" + owner_id + ", " + message.id_user + ", " + message.room_id + ", " + iten_id + ", 0, current_timestamp());";
+                }
+                MySqlCommand command4 = Conn.CreateCommand();
+                command4.CommandText = query;
+                command4.Connection = Conn;
+                command4.Transaction = tran;
+                command4.ExecuteNonQuery();
+                // insert into notification (id_to_user, id_from_user, id_room, id_iten, is_read) values (1, 1, 1, 1, 0);
 
                 tran.Commit();
                 connection.CloseConnection();
@@ -101,7 +131,7 @@ namespace achei_web.Models.DAO
                 String erro = ex.InnerException + ex.Message;
                 erro += ex.StackTrace;
             }
-            return room_id;
+            //return room_id;
         }
 
         public List<Message> selectMessages(int room)
@@ -117,9 +147,14 @@ namespace achei_web.Models.DAO
                 tran = Conn.BeginTransaction();
 
                 MySqlCommand command = Conn.CreateCommand();
-                command.CommandText = "SELECT id_message, message, id_user, date_send, message.room_id FROM message "+
+                //command.CommandText = "SELECT id_message, message, id_user, date_send, message.room_id FROM message "+
+                //                        "INNER JOIN iten_has_room ON message.room_id = iten_has_room.room_id "+
+                //                        "INNER JOIN room ON iten_has_room.room_id = room.id_room "+
+                //                        "WHERE room.id_room = "+room+" ORDER BY date_send;";
+                command.CommandText = "SELECT id_message, message, id_user, date_send, message.room_id, person.name FROM message "+
                                         "INNER JOIN iten_has_room ON message.room_id = iten_has_room.room_id "+
                                         "INNER JOIN room ON iten_has_room.room_id = room.id_room "+
+                                        "INNER JOIN person ON message.id_user = person.id "+
                                         "WHERE room.id_room = "+room+" ORDER BY date_send;";
                 command.Connection = Conn;
                 command.Transaction = tran;
@@ -133,6 +168,7 @@ namespace achei_web.Models.DAO
                     obj.id_user = Reader.GetInt32(2);
                     obj.date_send = (!Reader.IsDBNull(3)) ? Reader.GetDateTime(3) : DateTime.Now;
                     obj.room_id = Reader.GetInt32(4);
+                    obj.person.name = (!Reader.IsDBNull(5)) ? Reader.GetString(5) : string.Empty;
                     listMessages.Add(obj);
                 }
                 command.Dispose();
@@ -145,6 +181,48 @@ namespace achei_web.Models.DAO
                 erro += ex.StackTrace;
             }
             return listMessages;
+        }
+
+        public List<Room> selectRooms(int personid, int itenid)
+        {
+            List<Room> listRooms = new List<Room>();
+
+            try
+            {
+                Connection connection = new Connection();
+                MySqlConnection Conn = new MySqlConnection();
+                MySqlTransaction tran;
+                Conn = connection.OpenConnection();
+                tran = Conn.BeginTransaction();
+
+                MySqlCommand command = Conn.CreateCommand();
+                command.CommandText = "SELECT id_room, first_user_id, second_user_id FROM room " +
+                                        "INNER JOIN iten_has_room ON room.id_room = iten_has_room.room_id " +
+                                        "INNER JOIN iten ON iten_has_room.iten_id = iten.id " +
+                                        "INNER JOIN student ON iten.student_record = student.student_record " +
+                                        "WHERE student.person_id = " + personid + " and iten.id = "+itenid+" and room.first_user_id<> room.second_user_id;";
+                command.Connection = Conn;
+                command.Transaction = tran;
+                MySqlDataReader Reader = command.ExecuteReader();
+
+                while (Reader.Read())
+                {
+                    Room obj = new Room();
+                    obj.id_room = Reader.GetInt32(0);
+                    obj.first_user_id = Reader.GetInt32(1);
+                    obj.second_user_id = Reader.GetInt32(2);
+                    listRooms.Add(obj);
+                }
+                command.Dispose();
+                tran.Commit();
+                connection.CloseConnection();
+            }
+            catch (Exception ex)
+            {
+                String erro = ex.InnerException + ex.Message;
+                erro += ex.StackTrace;
+            }
+            return listRooms;
         }
 
     }

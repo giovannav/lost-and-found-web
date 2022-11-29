@@ -19,6 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <title>Cadastro</title>
     <style>
         body {
@@ -30,27 +31,131 @@
             max-height: 30%;
         }
     </style>
+    <script>
+
+    let email = false;
+    let name = false;
+    let password = false;
+    let student_record = false;
+
+    function ValidateEmail(input) {
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        if (input.value.match(validRegex)) {
+            var element = document.getElementById("alert_email");
+            element.innerHTML = "Email válido!";
+            document.form1.email.focus();
+            email = true;
+            console.log(email);
+            return true;
+        } else {
+            var element = document.getElementById("alert_email");
+            element.innerHTML = "Email inválido!";
+            document.form1.email.focus();
+            return false;
+        }
+        }
+
+    function ValidateName(input) {
+        const name_array = input.value.split(" ");
+        let length = name_array.length;
+        if (length >= 2 && (name_array[0] != name_array[1])) {
+            document.getElementById("alert_name").innerHTML = "";
+            document.form1.name.focus();
+            name = true;
+            console.log(name);
+            return true;
+        }
+        else {
+            document.getElementById("alert_name").innerHTML = "Preencha nome e sobrenome!";
+            document.form1.name.focus();
+            return false;
+        }
+    }
+
+     function ValidateStudentRecord() {
+         const input = document.getElementById("student_record");
+         const text = document.getElementById("alert_student_record")
+            input.addEventListener('input', validStudentRecord);
+            let regExpWeak = /[a-zA-Z]/;
+            let regExpMedium = /\d+/;
+            let regExpStrong = /[A-Z]/;
+            let min_medium_password = 6;
+            function validStudentRecord() {
+                let input_week = input.value.match(regExpWeak);
+                let input_medium = input.value.match(regExpMedium);
+                if (input.value) {
+                    if (input.value.length >= min_medium_password && ((input_week && input_medium))) {
+                        text.textContent = "Prontuário válido.";
+                        student_record = true;
+                    }
+                    else {
+                        text.textContent = "Prontuário inválido.";
+                    }
+                }
+            }
+        }
+
+        function ValidatePhone() {
+            document.getElementById('phone').addEventListener('blur', function (e) {
+                var x = e.target.value.replace(/\D/g, '').match(/(\d{2})(\d{5})(\d{4})/);
+                e.target.value = '(' + x[1] + ') ' + x[2] + '-' + x[3];
+            });
+        }
+
+    function ValidatePassword() {
+        const input = document.getElementById("password");
+        const text = document.getElementById("alert_password");
+        input.addEventListener('input', validPassword);
+        let regExpWeak = /[a-z]/;
+        let regExpMedium = /\d+/;
+        let regExpStrong = /.[!,@@,#,$,%,^,&,*,?,_,~,-,(,)]/;
+        let min_week_password = 3;
+        let min_medium_password = 6;
+        let min_strong_password = 6;
+        function validPassword() {
+            let input_week = input.value.match(regExpWeak);
+            let input_medium = input.value.match(regExpMedium);
+            let input_strong = input.value.match(regExpStrong);
+            if (input.value) {
+                if (input.value.length <= min_week_password && (input_week || input_medium || input_strong)) {
+                    text.textContent = "Senha fraca. Digite uma senha mais forte.";
+                }
+                if (input.value.length >= min_medium_password && ((input_week && input_medium) || (input_medium && input_strong) || (input_week && input_strong))) {
+                    text.textContent = "Senha média. Digite uma senha mais forte.";
+                }
+                if (input.value.length >= min_strong_password && input_week && input_medium && input_strong) {
+                    text.textContent = "Senha forte.";
+                    password = true;
+                }
+            }
+        }
+    }
+
+    function ValidateAll() {
+
+        if (email === true && name === true && password === true && student_record == true) {
+                pass;
+            }
+
+        else {
+            alert('Erro ao realizar cadastro');
+            document.getElementById("form1").reset();
+            location.reload();
+        }
+    }
+    </script>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="tela_login_aluno.html">Tapt!</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_login_aluno.html">Index</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_aluno.html">Cadastro aluno</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_item.html">Cadastro item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_lista_itens.html">Itens</a>
-                </li>
-            </ul>
-        </div>
+    <nav class="navbar navbar-expand-sm bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Student" asp-action="Login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Student" asp-action="Registration">Registration</a>
+            </li>
+        </ul>
     </nav>
     <section>
         <div class="container h-100 mt-5 mb-5">
@@ -61,40 +166,46 @@
                             <div class="row justify-content-center">
                                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                                     <p class="text-center h3 fw-bold mb-2 mx-1 mx-md-4 mt-4">Cadastro</p>
-                                    <form method="post" enctype="multipart/form-data" asp-controller="Student" asp-action="Registration" class="mx-1 mx-md-4">
+                                    <form method="post" name="form1" id="form1" enctype="multipart/form-data" asp-controller="Student" asp-action="Registration" class="mx-1 mx-md-4">
                                         <div class="d-flex flex-row align-items-center justify-content-center">
                                             <img src="~/css/logos/cat_sfundo.png" alt="Logo tapt" class="logo">
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="name">Nome</label>
-                                                <input type="text" name="name" id="name" class="form-control" />
+                                                <input type="text" name="name" id="name" class="form-control" required onkeydown="ValidateName(document.form1.name)" />
+                                                <p id="alert_name"></p>
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="email">E-mail</label>
-                                                <input type="email" id="email" name="email" class="form-control" />
+                                                <input type="email" id="email" name="email" class="form-control" required onkeyup="ValidateEmail(document.form1.email)" />
+                                                <p id="alert_email"></p>
+                                                <p>@ViewBag.Email</p>
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="student_record">Prontuário</label>
-                                                <input type="text" id="student_record" name="student_record"
-                                                       class="form-control" />
+                                                <input type="text" id="student_record" name="student_record" class="form-control" required onkeyup="ValidateStudentRecord()"/>
+                                                <p id="alert_student_record"></p>
+                                                <p>@ViewBag.Email</p>
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="password">Senha</label>
-                                                <input type="password" id="password" name="password" class="form-control" />
+                                                <input type="password" id="password" name="password" class="form-control" required onkeydown="ValidatePassword()" />
+                                                <p id="alert_password"></p>
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="phone">Telefone</label>
-                                                <input type="text" id="phone" name="phone"
+                                                <input type="text" id="phone" name="phone" onkeydown="ValidatePhone()" placeholder="(55) 55555-5555" required
                                                        class="form-control" />
+                                                <p id="alert_phone"></p>
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
@@ -107,7 +218,6 @@
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="course">Curso</label>
-                                                @*<input type="number" id="course.id" name="course.id" class="form-control" />*@
                                                 <select name="course.id" id="course.id">
                                                     @{
                                                         foreach (var course in Model.Item1)
@@ -119,8 +229,7 @@
                                             </div>
                                         </div> 
                                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                            <input type="submit" class="btn btn-primary btn-lg" value="Cadastrar" />
-                                            @*<button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>*@
+                                            <input type="submit" class="btn btn-primary btn-lg" onclick="ValidateAll()" value="Cadastrar" />
                                         </div>
                                     </form>
                                 </div>

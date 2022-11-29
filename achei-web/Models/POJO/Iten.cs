@@ -15,10 +15,14 @@ namespace achei_web.Models.POJO
         public int status { get; set; } = 0;
 
         public string student_record { get; set; } = string.Empty;
+
+        public int person_id { get; set; } = 0;
         public IFormFile ImageFile { get; set; } = null;
 
         public string image_name { get; set; } = string.Empty;
 
         public string image_path { get; set; } = string.Empty;
+
+        public Person person { get; set; } = new Person();
     }
 }

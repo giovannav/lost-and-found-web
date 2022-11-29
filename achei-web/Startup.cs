@@ -1,3 +1,4 @@
+using achei_web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +26,9 @@ namespace achei_web
         {
             services.AddControllersWithViews();
 
+            // Adicionando funcionalidades
+            services.AddSignalR();
+
             // Adicionando sessão
             services.AddSession(options =>
             {
@@ -48,11 +52,18 @@ namespace achei_web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseSignalR(r =>
+            {
+                r.MapHub<ChatHub>("/Index");
+            });
+
+
             // Adicionar sessão
             app.UseSession();
 
             app.UseRouting();
 
+           
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

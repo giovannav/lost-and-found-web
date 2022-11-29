@@ -20,7 +20,8 @@ namespace achei_web.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Login", "Student");
+
         }
 
         public IActionResult Privacy()

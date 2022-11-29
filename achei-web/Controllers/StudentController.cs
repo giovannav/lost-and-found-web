@@ -23,16 +23,19 @@ namespace achei_web.Controllers
             _appEnvironment = env;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
         [HttpGet]
         [Route("Registration")]
-        public IActionResult Registration()
+        public IActionResult Registration(int message)
         {
             CourseDAO objCourse = new CourseDAO();
+            if (message == 1)
+            {
+                ViewBag.Email = "Email ou prontuário já cadastrados!";
+            }
+            else
+            {
+                ViewBag.Email = "";
+            }
             var tuple = Tuple.Create(objCourse.selectObject(""));
             return View(tuple);
         }
@@ -42,9 +45,19 @@ namespace achei_web.Controllers
         public IActionResult Registration(Student student)
         
         {
-            //Course course = new Course();
-            //student.course.id = 1;
+            CourseDAO objCourse = new CourseDAO();
             StudentDAO studentDAO = new StudentDAO();
+
+            bool email_exists = studentDAO.selectStudentEmail(student);
+
+            var tuple = Tuple.Create(objCourse.selectObject(""));
+
+            if (email_exists == true)
+            {
+                //string message = "Email já cadastrado!";
+                return this.RedirectToAction("Registration", "Student", new { message = 1 });
+            }
+
             studentDAO.insert(student);
             return RedirectToAction("Login");
         }
@@ -57,19 +70,28 @@ namespace achei_web.Controllers
         }
 
         [HttpGet]
+        [Route("Logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("StudentSession");
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
         public IActionResult Index()
         {
             StudentDAO objCDAO = new StudentDAO();
-
-            // Get sessão
-            var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
-
-            //Get SessionID inside Controller.
-            TempData["StudentSession"] = HttpContext.Session.Id;
-            
-            var tuple = Tuple.Create(objCDAO.selectObject(""), person);
-            return View(tuple);
-            //return View();
+            try
+            {
+                var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
+                TempData["StudentSession"] = HttpContext.Session.Id;
+                var tuple = Tuple.Create(objCDAO.selectObject(""), person);
+                return View(tuple);
+            }
+            catch
+            {
+                return this.RedirectToAction("Login", "Student");
+            }
         }
 
         [HttpPost]
@@ -78,13 +100,78 @@ namespace achei_web.Controllers
         {
             StudentDAO studentDAO = new StudentDAO();
             Person authenticate = studentDAO.authenticate(student);
-            if (authenticate != null)
+
+            try
             {
-                HttpContext.Session.SetString("StudentSession", JsonConvert.SerializeObject(authenticate));
-                return this.RedirectToAction("List", "Iten");
-                //return RedirectToAction("Index");
+                if (authenticate != null)
+                {
+                    HttpContext.Session.SetString("StudentSession", JsonConvert.SerializeObject(authenticate));
+                    return this.RedirectToAction("List", "Iten");
+                }
+                return View();
             }
-            return View();
+            catch
+            {
+                return this.RedirectToAction("Login", "Student");
+            }
+        }
+
+        [HttpGet]
+        [Route("Profile/{id}")]
+        public IActionResult Profile(int id)
+        {
+            StudentDAO studentDAO = new StudentDAO();
+
+            try
+            {
+                Student student = new Student();
+                var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
+                student = studentDAO.selectStudent(id);
+                var tuple = Tuple.Create(student, person);
+                return View(tuple);
+            }
+            catch
+            {
+                return this.RedirectToAction("Login", "Student");
+            }
+        }
+
+        [HttpGet]
+        [Route("Update/{id}")]
+        public IActionResult Update(int id)
+        {
+            StudentDAO studentDAO = new StudentDAO();
+            CourseDAO objCourse = new CourseDAO();
+            try
+            {
+                var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
+                var tuple = Tuple.Create(person, studentDAO.selectStudent(id), objCourse.selectObject(""));
+                return View(tuple);
+            }
+            catch
+            {
+                return this.RedirectToAction("Login", "Student");
+            }
+        }
+
+        [HttpPost]
+        [Route("Update/{id}")]
+        public IActionResult Update(Student student)
+        {
+            StudentDAO studentDAO = new StudentDAO();
+            CourseDAO objCourse = new CourseDAO();
+
+            try
+            {
+                var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
+                student.id = person.id;
+                studentDAO.update(student);
+                return RedirectToAction("Profile", new { id = person.id });
+            }
+            catch
+            {
+                return this.RedirectToAction("Login", "Student");
+            }
         }
     }
 }

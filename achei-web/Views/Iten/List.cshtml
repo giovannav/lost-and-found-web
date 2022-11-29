@@ -2,7 +2,9 @@
     Layout = null;
 }
 
-@model Tuple<List<achei_web.Models.POJO.Student>, achei_web.Models.POJO.Person, List<achei_web.Models.POJO.Iten>>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@model Tuple<List<achei_web.Models.POJO.Student>, achei_web.Models.POJO.Person, IPagedList<achei_web.Models.POJO.Iten>, List<achei_web.Models.POJO.Notification>>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,8 +13,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <title>Itens</title>
     <style>
         body {
@@ -26,165 +30,122 @@
 
         img {
             max-height: 200px;
+            min-height: 200px;
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="tela_login_aluno.html">Tapt!</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_login_aluno.html">Index</a>
+    <nav class="navbar navbar-expand-sm bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/List/Index">Início</a>
+
+            </li>
+
+            <li class="nav-item">
+                <div class="container">
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            Notificações
+                        </button>
+                        <div class="dropdown-menu">
+
+                            @{
+                                foreach (var iten in Model.Item4)
+                                {
+                                    <a class="dropdown-item" asp-area="" asp-controller="Chat" asp-route-id="@iten.id_room" asp-action="Index">@iten.person.name enviou @iten.id mensagens sobre o item perdido @iten.iten.name</a>
+                                }
+                                if (Model.Item4.Count() <= 0)
+                                {
+                                    <p>Nenhuma notificação.</p>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Opções
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-user="@Model.Item2.id" asp-action="List">Meus itens</a>
+                        <a class="nav-link" asp-area="" asp-controller="Student" asp-route-id="@Model.Item2.id" asp-action="Update">Editar meu perfil</a>
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-id="@Model.Item2.id" asp-action="Create">Cadastrar novo item</a>
+                    </div>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_aluno.html">Cadastro aluno</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_item.html">Cadastro item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_lista_itens.html">Itens</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Logout">Sair</a>
                 </li>
             </ul>
         </div>
     </nav>
-    <div class="container mt-5 mb-3">
+        <div class="container mt-5 mb-3">
         <h3>Olá, @Model.Item2.name!</h3>
-        <a class="nav-link text-dark" asp-area="" asp-controller="Iten" asp-route-id="@Model.Item2.id" asp-action="Create">Criar item</a>
+
+        <form method="post" enctype="multipart/form-data" asp-controller="Iten" asp-action="List">
+            <div class="d-flex flex-row align-items-center mt-4">
+                <div class="form-outline flex-fill col-sm-12">
+                    <p>Filtrar por intervalo de data:</p>
+                </div>
+            </div>
+            <div class="d-flex flex-row align-items-center mb-4">
+                <div class="form-outline flex-fill mb-0 mt-3 col-sm-2">
+                    <label class="form-label" for="date_start">Início </label>
+                    <input type="date" id="date_start" name="date_start" class="form-control" />
+                </div>
+                <div class="form-outline flex-fill mb-0 mt-3 col-sm-2">
+                    <label class="form-label" for="date_end">Final</label>
+                    <input type="date" id="date_end" name="date_end" class="form-control" />
+                </div>
+                <div class="form-outline align-items-center mb-0 mt-5 col-sm-2">
+                    <input type="submit" class="btn btn-primary btn-sm" value="Pesquisar" />
+                </div>
+            </div>
+        </form>
+
         <div class="row">
-            <!--Início card-->
-            <!--Fim card-->
-            <!--Início card-->
             @{
                 foreach (var iten in Model.Item3)
                 {
-                    <div class="col-md-4 mt-5">
+                    <div class="col-md-4 mt-5 mb-2">
                         <div class="card p-3 mb-2">
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex flex-row align-items-center">
                                     <div class="ms-2 c-details">
-                                        <h6 class="mb-0">Postado por: @iten.student_record</h6> <span>Há 1 dia</span>
+                                        <a asp-area="" asp-controller="Student" asp-route-id="@iten.person_id" asp-action="Profile">Postado por @iten.person.name</a>
+                                        <p>Em @iten.date_found</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-5">
-                                <div class="d-flex flex-row align-items-center justify-content-center">
+                                <div class="d-flex flex-row align-items-center justify-content-center" style="max-height: 400px;">
                                     <img src="~/@iten.image_path" class="img-fluid" alt="">
                                 </div>
-                                <h3 class="heading">@iten.name</h3>
+                                <h4 class="heading text-center">@iten.name</h4>
                                 <div class="d-flex flex-row align-items-center justify-content-center">
-                                    <a type="button" class="btn btn-primary" asp-area="" asp-controller="Iten" asp-route-id="@iten.id" asp-action="Read">Ver mais</a>
+                                    <a type="button" class="btn btn-primary btn-sm" asp-area="" asp-controller="Iten" asp-route-id="@iten.id" asp-action="Read">Ver mais</a>
 
                                     @{
                                         if (@Model.Item1[0].student_record == @iten.student_record)
                                         {
-                                            <a type="button" class="btn btn-primary ml-4" asp-area="" asp-controller="Iten" asp-route-id="@iten.id" asp-action="Update">Editar</a>
+                                            <a type="button" class="btn btn-primary ml-4 btn-sm" asp-area="" asp-controller="Iten" asp-route-id="@iten.id" asp-action="Update">Editar</a>
                                         }
                                     }
-                                    @*<a href="pagina_item.html" type="button" class="btn btn-primary">Ver mais</a>*@
                                 </div>
                             </div>
                         </div>
                     </div>
                 }
             }
-
-            <!--Fim card-->
-            <!--Início card-->
-            <!--<div class="col-md-4 mt-5">
-        <div class="card p-3 mb-2">
-            <div class="d-flex justify-content-between">
-                <div class="d-flex flex-row align-items-center">
-                    <div class="ms-2 c-details">
-                        <h6 class="mb-0">Postado por: Maria</h6> <span>Há 1 dia</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-5">
-                <div class="d-flex flex-row align-items-center justify-content-center">
-                    <img src="fotos/carteira.jpg" class="img-fluid" alt="">
-                </div>
-                <h3 class="heading">Carteira</h3>
-                <div class="d-flex flex-row align-items-center justify-content-center">
-                    <a href="pagina_item.html" type="button" class="btn btn-primary">Ver mais</a>
-                </div>
-            </div>
         </div>
-    </div>-->
-            <!--Fim card-->
-            <!--Início card-->
-            <!--<div class="col-md-4 mt-5">
-        <div class="card p-3 mb-2">
-            <div class="d-flex justify-content-between">
-                <div class="d-flex flex-row align-items-center">
-                    <div class="ms-2 c-details">
-                        <h6 class="mb-0">Postado por: Maria</h6> <span>Há 1 dia</span>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-5">
-                <div class="d-flex flex-row align-items-center justify-content-center">
-                    <img src="fotos/garrafa.jpg" class="img-fluid" alt="">
-                </div>
-                <h3 class="heading">Garrafa</h3>
-                <div class="d-flex flex-row align-items-center justify-content-center">
-                    <a href="pagina_item.html" type="button" class="btn btn-primary">Ver mais</a>
-                </div>
-            </div>
-        </div>
-    </div>-->
-            <!--Fim card-->
-            <!--Início card-->
-            <!--<div class="col-md-4 mt-5">
-        <div class="card p-3 mb-2">
-            <div class="d-flex justify-content-between">
-                <div class="d-flex flex-row align-items-center">
-                    <div class="ms-2 c-details">
-                        <h6 class="mb-0">Postado por: Maria</h6> <span>Há 1 dia</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-5">
-                <div class="d-flex flex-row align-items-center justify-content-center">
-                    <img src="fotos/mouse.webp" class="img-fluid" alt="">
-                </div>
-                <h3 class="heading">Mouse</h3>
-                <div class="d-flex flex-row align-items-center justify-content-center">
-                    <a href="pagina_item.html" type="button" class="btn btn-primary">Ver mais</a>
-                </div>
-            </div>
-        </div>
-    </div>-->
-            <!--Fim card-->
-            <!--Início card-->
-            <!--<div class="col-md-4 mt-5">
-        <div class="card p-3 mb-2">
-            <div class="d-flex justify-content-between">
-                <div class="d-flex flex-row align-items-center">
-                    <div class="ms-2 c-details">
-                        <h6 class="mb-0">Postado por: Maria</h6> <span>Há 1 dia</span>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-5">
-                <div class="d-flex flex-row align-items-center justify-content-center">
-                    <img src="fotos/oculos.jpg" class="img-fluid" alt="">
-                </div>
-                <h3 class="heading">Óculos</h3>
-                <div class="d-flex flex-row align-items-center justify-content-center">
-                    <a href="pagina_item.html" type="button" class="btn btn-primary">Ver mais</a>
-                </div>
-            </div>
-        </div>
-    </div>-->
-            <!--Fim card-->
-
-        </div>
+        @Html.PagedListPager((IPagedList)Model.Item3, page => Url.Action("List", new { page }))
     </div>
 </body>
-
 </html>

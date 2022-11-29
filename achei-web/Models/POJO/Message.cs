@@ -13,5 +13,7 @@ namespace achei_web.Models.POJO
         public DateTime date_send { get; set; } = DateTime.Now;
         public int room_id { get; set; } = 0;
 
+        public Person person { get; set; } = new Person();
+
     }
 }

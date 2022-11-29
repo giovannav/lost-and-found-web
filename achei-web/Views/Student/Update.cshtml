@@ -1,0 +1,213 @@
+﻿@{
+    Layout = null;
+}
+
+@model Tuple<achei_web.Models.POJO.Person, achei_web.Models.POJO.Student, List<achei_web.Models.POJO.Course>>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Item</title>
+    <style>
+        body {
+            background-color: rgb(255, 246, 229);
+        }
+
+        .logo {
+            max-width: 30%;
+            max-height: 30%;
+        }
+    </style>
+    <script>
+        let name = false;
+        let password = false;
+        let student_record = false;
+
+        function ValidateName(input) {
+            const name_array = input.value.split(" ");
+            let length = name_array.length;
+            if (length >= 2 && (name_array[0] != name_array[1])) {
+                document.getElementById("alert_name").innerHTML = "";
+                document.form1.name.focus();
+                name = true;
+                console.log(name);
+                return true;
+            }
+            else {
+                document.getElementById("alert_name").innerHTML = "Preencha nome e sobrenome!";
+                document.form1.name.focus();
+                return false;
+            }
+        }
+
+        function ValidateStudentRecord() {
+            const input = document.getElementById("student_record");
+            const text = document.getElementById("alert_student_record")
+            input.addEventListener('input', validStudentRecord);
+            let regExpWeak = /[a-zA-Z]/;
+            let regExpMedium = /\d+/;
+            let regExpStrong = /[A-Z]/;
+            let min_medium_password = 6;
+            function validStudentRecord() {
+                let input_week = input.value.match(regExpWeak);
+                let input_medium = input.value.match(regExpMedium);
+                if (input.value) {
+                    if (input.value.length >= min_medium_password && ((input_week && input_medium))) {
+                        text.textContent = "Prontuário válido.";
+                        student_record = true;
+                    }
+                    else {
+                        text.textContent = "Prontuário inválido.";
+                    }
+                }
+            }
+        }
+
+        function ValidatePhone() {
+            document.getElementById('phone').addEventListener('blur', function (e) {
+                var x = e.target.value.replace(/\D/g, '').match(/(\d{2})(\d{5})(\d{4})/);
+                e.target.value = '(' + x[1] + ') ' + x[2] + '-' + x[3];
+            });
+        }
+
+        function ValidatePassword() {
+            const input = document.getElementById("password");
+            const text = document.getElementById("alert_password");
+            input.addEventListener('input', validPassword);
+            let regExpWeak = /[a-z]/;
+            let regExpMedium = /\d+/;
+            let regExpStrong = /.[!,@@,#,$,%,^,&,*,?,_,~,-,(,)]/;
+            let min_week_password = 3;
+            let min_medium_password = 6;
+            let min_strong_password = 6;
+            function validPassword() {
+                let input_week = input.value.match(regExpWeak);
+                let input_medium = input.value.match(regExpMedium);
+                let input_strong = input.value.match(regExpStrong);
+                if (input.value) {
+                    if (input.value.length <= min_week_password && (input_week || input_medium || input_strong)) {
+                        text.textContent = "Senha fraca. Digite uma senha mais forte.";
+                    }
+                    if (input.value.length >= min_medium_password && ((input_week && input_medium) || (input_medium && input_strong) || (input_week && input_strong))) {
+                        text.textContent = "Senha média. Digite uma senha mais forte.";
+                    }
+                    if (input.value.length >= min_strong_password && input_week && input_medium && input_strong) {
+                        text.textContent = "Senha forte.";
+                        password = true;
+                    }
+                }
+            }
+        }
+
+        function ValidateAll() {
+
+            if (name === true && password === true && student_record == true) {
+                pass;
+            }
+
+            else {
+                alert('Erro ao atualizar perfil.');
+                document.getElementById("form1").reset();
+                location.reload();
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/List/Index">Início</a>
+
+            </li>
+        </ul>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Opções
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-user="@Model.Item1.id" asp-action="List">Meus itens</a>
+                        <a class="nav-link" asp-area="" asp-controller="Student" asp-route-id="@Model.Item1.id" asp-action="Update">Editar meu perfil</a>
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-id="@Model.Item1.id" asp-action="Create">Cadastrar novo item</a>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Logout">Sair</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <section>
+        <div class="container h-100 mt-5 mb-5">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-12 col-xl-11">
+                    <div class="card text-black" style="border-radius: 25px;">
+                        <div class="card-body p-md-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                                    <p class="text-center h3 fw-bold mb-2 mx-1 mx-md-4 mt-4">Atualizar meu perfil</p>
+
+                                    <form class="mx-1 mx-md-4" name="form1" id="form1" method="post" enctype="multipart/form-data" asp-controller="Student" asp-action="Update">
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="name">Nome</label>
+                                                <input type="text" id="name" name="name" value="@Model.Item2.name" class="form-control" required onkeydown="ValidateName(document.form1.name)" />
+                                                <p id="alert_name"></p>
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" id="email" name="email" value="@Model.Item2.email" class="form-control" />
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="name">Senha</label>
+                                                <input type="password" id="password" name="password" value="@Model.Item2.password" required class="form-control" onkeydown="ValidatePassword()" />
+                                                <p id="alert_password"></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="phone">Telefone</label>
+                                                <input type="text" id="phone" name="phone" value="@Model.Item2.phone" class="form-control" required onkeydown="ValidatePhone()" placeholder="(55) 55555-5555" />
+                                            </div>
+                                        </div>
+
+                                        <label class="form-label" for="course.id">Curso</label>
+                                        <select name="course.id" required id="course.id">
+
+                                            @{
+                                                foreach (var course in Model.Item3)
+                                                {
+                                                    <option value="@course.id" id="course.id" name="course.id">@course.name - @course.course_time</option>
+                                                }
+                                            }
+                                        </select>
+
+                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4 mt-4">
+                                            <input type="submit" class="btn btn-primary btn-lg" value="Atualizar" onclick="check_status()" id="button" />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

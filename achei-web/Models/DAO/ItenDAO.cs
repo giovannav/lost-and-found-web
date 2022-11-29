@@ -33,8 +33,8 @@ namespace achei_web.Models.DAO
                 string student_record = command1.ExecuteScalar().ToString();
 
                 MySqlCommand command2 = Conn.CreateCommand();
-                command2.CommandText = "INSERT INTO iten (name, description, date_found, image_name, image_path, status, student_record) VALUES " +
-                    "('" + name + "', '" + description + "', '" + date_found + "', '" + image_name + "', '" + image_path + "', '" + status + "', '" + student_record + "');";
+                command2.CommandText = "INSERT INTO iten (name, description, date_found, image_name, image_path, status, student_record, person_id) VALUES " +
+                    "('" + name + "', '" + description + "', '" + date_found + "', '" + image_name + "', '" + image_path + "', '" + status + "', '" + student_record + "', " + id + ");";
                 command2.Connection = Conn;
                 command2.Transaction = tran;
                 command2.ExecuteNonQuery();
@@ -101,7 +101,7 @@ namespace achei_web.Models.DAO
             public List<Iten> selectObject(String ord)
             {
             List<Iten> listItens = new List<Iten>();
-
+            string query =  "";
             try
             {
                 Connection connection = new Connection();
@@ -111,7 +111,18 @@ namespace achei_web.Models.DAO
                 tran = Conn.BeginTransaction();
 
                 MySqlCommand command = Conn.CreateCommand();
-                command.CommandText = "SELECT id, name, description, date_found, image_name, image_path, status, student_record FROM iten " + ord;
+
+                if (ord.Length > 0){
+                    query = "SELECT iten.id, iten.name, iten.description, iten.date_found, iten.image_name, iten.image_path, iten.status, iten.student_record, iten.person_id, person.name " +
+                                    "FROM iten INNER JOIN person ON iten.person_id = person.id where iten.status = 0 and " + ord;
+                }
+                else
+                {
+                    query = "SELECT iten.id, iten.name, iten.description, iten.date_found, iten.image_name, iten.image_path, iten.status, iten.student_record, iten.person_id, person.name " +
+                                   "FROM iten INNER JOIN person ON iten.person_id = person.id where iten.status = 0 order by date_found desc" + ord;
+                }
+
+                command.CommandText = query;
                 command.Connection = Conn;
                 command.Transaction = tran;
                 MySqlDataReader Reader = command.ExecuteReader();
@@ -127,6 +138,8 @@ namespace achei_web.Models.DAO
                     obj.image_path = (!Reader.IsDBNull(5)) ? Reader.GetString(5) : string.Empty;
                     obj.status = Reader.GetInt32(6);
                     obj.student_record = (!Reader.IsDBNull(7)) ? Reader.GetString(7) : string.Empty;
+                    obj.person_id = Reader.GetInt32(8);
+                    obj.person.name = (!Reader.IsDBNull(9)) ? Reader.GetString(9) : string.Empty;
                     listItens.Add(obj);
                 }
                 command.Dispose();
@@ -153,8 +166,7 @@ namespace achei_web.Models.DAO
                 tran = Conn.BeginTransaction();
 
                 MySqlCommand command1 = Conn.CreateCommand();
-                command1.CommandText = "SELECT person_id FROM iten INNER JOIN student ON " +
-                     "iten.student_record = student.student_record WHERE iten.id = " + id + ";";
+                command1.CommandText = "SELECT person_id FROM iten WHERE iten.id = " + id + ";";
                 command1.Connection = Conn;
                 command1.Transaction = tran;
                 person_id = Convert.ToInt32(command1.ExecuteScalar());

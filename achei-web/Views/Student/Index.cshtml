@@ -27,19 +27,28 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="tela_login_aluno.html">Tapt!</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">Index aluno</a>
-                    @*<a class="nav-link" href="tela_login_aluno.html">Index</a>*@
+    <nav class="navbar navbar-expand-sm bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/List/Index">Início</a>
+
+            </li>
+        </ul>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Opções
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-user="@Model.Item2.id" asp-action="List">Meus itens</a>
+                        <a class="nav-link" asp-area="" asp-controller="Student" asp-route-id="@Model.Item2.id" asp-action="Update">Editar meu perfil</a>
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-id="@Model.Item2.id" asp-action="Create">Cadastrar novo item</a>
+                    </div>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Iten" asp-action="Create">Novo item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Iten" asp-action="List">Iten</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Logout">Sair</a>
                 </li>
             </ul>
         </div>

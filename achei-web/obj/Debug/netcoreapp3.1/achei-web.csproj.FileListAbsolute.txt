@@ -111,3 +111,14 @@ C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\ac
 C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Iten\Read.cshtml.g.cs
 C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Iten\Update.cshtml.g.cs
 C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Chat\Index.cshtml.g.cs
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\libman.json
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Student\Profile.cshtml.g.cs
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\X.PagedList.Mvc.dll
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\PagedList.dll
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\PagedList.Mvc.dll
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\JetBrains.Annotations.dll
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\X.PagedList.dll
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\X.PagedList.Mvc.Core.dll
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\achei-web.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\obj\Debug\netcoreapp3.1\Razor\Views\Student\Update.cshtml.g.cs
+C:\Users\giova\OneDrive\Documentos\8semestre\desenvolvimento web 2\2022-09-20\achei-web\achei-web\bin\Debug\netcoreapp3.1\BCrypt.Net-Next.dll

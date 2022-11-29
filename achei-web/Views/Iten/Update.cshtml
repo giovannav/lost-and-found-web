@@ -27,21 +27,29 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="tela_login_aluno.html">Tapt!</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_">Index</a>
+    <nav class="navbar navbar-expand-sm bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/List/Index">Início</a>
+
+            </li>
+
+        </ul>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Opções
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-user="@Model.Item2.id" asp-action="List">Meus itens</a>
+                        <a class="nav-link" asp-area="" asp-controller="Student" asp-route-id="@Model.Item2.id" asp-action="Update">Editar meu perfil</a>
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-id="@Model.Item2.id" asp-action="Create">Cadastrar novo item</a>
+                    </div>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_aluno.html">Cadastro aluno</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_item.html">Cadastro item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_lista_itens.html">Itens</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Logout">Sair</a>
                 </li>
             </ul>
         </div>
@@ -54,10 +62,7 @@
                         <div class="card-body p-md-5">
                             <div class="row justify-content-center">
                                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-                                    <!-- <div class="row d-flex justify-content-center align-items-center">
-               <p class="text-center h3 fw-bold mb-5 mx-1 mx-md-4 mt-4">tapt!</p>
-           </div>
-        -->
+                                   
                                     <p class="text-center h3 fw-bold mb-2 mx-1 mx-md-4 mt-4">Atualizar item</p>
                                     <div class="d-flex flex-row align-items-center justify-content-center">
                                         <img src="~/@Model.Item2.image_path" class="img-fluid" alt="">
@@ -95,8 +100,8 @@
                                                 }
                                             </script>
                                         </div>
-                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                            <input type="submit" class="btn btn-primary btn-lg" value="Atualizar" onclick="check_status()" id="button" />
+                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4 mt-4">
+                                            <input type="submit" class="btn btn-primary" value="Atualizar" onclick="check_status()" id="button" />
                                             @*<button type="button" class="btn btn-primary btn-lg">Cadastrar</button>*@
                                         </div>
                                     </form>

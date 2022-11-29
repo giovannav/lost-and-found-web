@@ -2,7 +2,9 @@
     Layout = null;
 }
 
-@model Tuple<achei_web.Models.POJO.Room, achei_web.Models.POJO.Person, List<achei_web.Models.POJO.Message>>
+@using Microsoft.AspNetCore.Identity
+ 
+@model Tuple<achei_web.Models.POJO.Person, List<achei_web.Models.POJO.Message>, achei_web.Models.POJO.Room>
 
 
 <!DOCTYPE html>
@@ -17,7 +19,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/aspnet/signalr/dist/browser/signalr.js"></script>
     <title>Chat</title>
+    
     <style>
         .card-bordered {
             border: 1px solid #ebebeb;
@@ -335,31 +340,23 @@
             max-width: 50%;
             max-height: 50%;
         }
-        time{
+
+        .meta {
             color: #282828;
+            background-color: aqua;
         }
+       
     </style>
 </head>
 
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="tela_login_aluno.html">Tapt!</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_login_aluno.html">Index</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_aluno.html">Cadastro aluno</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_item.html">Cadastro item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_lista_itens.html">Itens</a>
-                </li>
-            </ul>
-        </div>
+    <nav class="navbar navbar-expand-sm bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/List/Index">Início</a>
+            </li>
+        </ul>
     </nav>
     <section>
         <div class="container h-100">
@@ -367,61 +364,56 @@
                 <div class="d-flex flex-row align-items-center justify-content-center">
                     <img src="~/css/logos/cat_sfundo.png" alt="Logo tapt" class="logo">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
+                    <h5>Olá, @Model.Item1.name</h5>
                     <div class="card card-bordered">
                         <div class="card-header">
-                            <h4 class="card-title"><strong>Chat</strong></h4>
+                            <h4 class="card-title"><strong>Chat @*<a asp-area="" asp-controller="Iten" asp-route-id="@Model.Item3.i" asp-action="Read">(visualizar item)</a>*@</strong></h4>
                         </div>
 
 
                         <div class="ps-container ps-theme-default ps-active-y" id="chat-content"
-                             style="overflow-y: scroll !important; height:400px !important;">
+                             style="overflow-y: scroll !important; height: 400px !important; scroll-behavior: smooth;">
 
-                            @{
-                                foreach (var iten in Model.Item3)
-                                {
-                                    @if (iten.id_user != Model.Item2.id)
+                            <div id="messagesList">
+                                @{
+                                    foreach (var iten in Model.Item2)
                                     {
-                                        <div class="media media-chat">
-                                            <div class="media-body">
-                                                <p>@iten.message</p>
-                                                <p class="meta"><time datetime="2018">@iten.date_send</time></p>
-                                            </div>
-                                        </div>
-                                    }
-                                        @if (iten.id_user == Model.Item2.id)
+                                        @if (iten.id_user != Model.Item1.id)
                                         {
-                                            <div class="media media-chat media-chat-reverse">
-                                                <div class="media-body">
+                                            <div>
+                                                <div style="background-color: #F0F0F0; margin: 5%; padding: 2%; border-radius: 5%;">
+                                                    <p><a asp-area="" asp-controller="Student" asp-route-id="@iten.id_user" asp-action="Profile">@iten.person.name</a> às @iten.date_send </p>
                                                     <p>@iten.message</p>
-                                                    <p class="meta"><time datetime="2018">@iten.date_send</time></p>
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (iten.id_user == Model.Item1.id)
+                                        {
+                                            <div>
+                                                <div style="background-color: #F0F0F0; margin: 5%; padding: 2%; border-radius: 5%;">
+                                                    <p><a asp-area="" asp-controller="Student" asp-route-id="@iten.id_user" asp-action="Profile">@iten.person.name</a> às @iten.date_send </p>
+                                                    <p>@iten.message</p>
                                                 </div>
                                             </div>
                                         }
                                     }
                                 }
-
-
-
-
-                                <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
-                                    <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-                                </div>
-                                <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
-                                    <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
-                                </div>
                             </div>
+
+                            <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;"><div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;"><div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div></div>
+                        </div>
 
                         <form method="post" enctype="multipart/form-data" asp-controller="Chat" asp-action="Insert" class="mx-1 mx-md-4">
                             <div class="publisher bt-1 border-light">
-                                <input class="publisher-input form-control" type="text" id="message" name="message" placeholder="Mensagem">
-                                <input class="publisher-input form-control" type="hidden" id="room_id" name="room_id" value="@Model.Item1.id_room">
-                                <input class="publisher-input form-control" type="hidden" id="id_user" name="id_user" value="@Model.Item2.id">
+                                <input class="publisher-input form-control" type="text" id="userMessage" name="userMessage" required placeholder="Mensagem">
+                                <input class="publisher-input form-control" type="hidden" id="room_id" name="room_id" value="@Model.Item3.id_room">
+                                <input class="publisher-input form-control" type="hidden" id="id_user" name="id_user" value="@Model.Item1.id">
+                                <input class="publisher-input form-control" type="hidden" id="userName" name="userName" value="@Model.Item1.name">
 
-                                <span class="publisher-btn file-group">
-                                    <i class="fa fa-paperclip file-browser"></i>
-                                    <input type="submit" class="btn btn-primary btn-lg" value="Enviar" />
-                                    @*<a type="button" class="btn btn-primary ml-4" asp-area="" asp-controller="Iten" asp-route-id="id" asp-action="Chat">Enviar</a>*@
+                                <span class="publisher-btn">
+                                    @*<i class="fa fa-paperclip file-browser"></i>*@
+                                    <input type="submit" class="btn btn-primary btn-sm" id="btnSendMessage" @*onclick="scrollToBottom()"*@ value="Enviar" />
                                 </span>
                             </div>
                         </form>
@@ -429,7 +421,81 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+
+            function scrollToBottom() {
+                const chat_content = document.getElementById('chat-content');
+                chat_content.scrollTop = chat_content.scrollHeight;
+
+                var getValue = document.getElementById("userMessage");
+                if (getValue.value != "") {
+                    getValue.value = "";
+                }
+            }
+
+            var connection = new signalR.HubConnectionBuilder().withUrl("/Index").build();
+            document.getElementById("btnSendMessage").disabled = true;
+
+            connection.on("ReceiveMessage", function (user, id_user, message) {
+                var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                var encodedMsg = user + " : " + msg;
+
+
+                var d = new Date();
+
+                var newDiv = document.createElement("div");
+                //newDiv.className = "media media-chat media-chat-reverse";
+
+                var newDiv2 = document.createElement("div");
+                //newDiv2.className = "media-body";
+
+                var createA = document.createElement('a');
+                var createAText = document.createTextNode(user);
+                createA.setAttribute('href', "/student/Profile/" + id_user + "");
+
+                createA.appendChild(createAText);
+
+                var tag = document.createElement("p");
+                var text = document.createTextNode(" às " + d.toLocaleString());
+                tag.appendChild(createA);
+                tag.appendChild(text);
+
+
+                var tag2 = document.createElement("p");
+                var text2 = document.createTextNode(msg);
+                tag2.appendChild(text2);
+
+                newDiv2.appendChild(tag);
+                newDiv2.appendChild(tag2);
+                newDiv2.style.backgroundColor = '#F0F0F0';
+                newDiv2.style.margin = '5%';
+                newDiv2.style.padding = '2%';
+                newDiv2.style.borderRadius = '5%';
+                newDiv.appendChild(newDiv2);
+
+                //newDiv.textContent = encodedMsg;
+                document.getElementById("messagesList").appendChild(newDiv);
+                scrollToBottom();
+            });
+
+            connection.start().then(function () {
+                document.getElementById("btnSendMessage").disabled = false;
+            }).catch(function () {
+                return console.error(err.toString());
+            });
+
+            document.getElementById("btnSendMessage").addEventListener("click", function (evt) {
+                var user = document.getElementById("userName").value;
+                var message = document.getElementById("userMessage").value;
+                var room_id = document.getElementById("room_id").value;
+                var id_user = document.getElementById("id_user").value;
+                connection.invoke("sendMessage", user, message, room_id, id_user).catch(function (err) {
+                    return console.error(err.toString());
+                });
+                evt.preventDefault();
+                scrollToBottom();
+            });
+        </script>
     </section>
 </body>
-
 </html>

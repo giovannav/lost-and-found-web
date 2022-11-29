@@ -14,33 +14,41 @@ namespace achei_web.Controllers
     {
         [HttpGet]
         [Route("Index/{id}")]
-        public IActionResult Index(int id)
+        public IActionResult Index(int id) //room id
         {
             Room room1 = new Room();
             List<Message> objMessage = new List<Message>();
             ItenDAO itenDAO = new ItenDAO();
+            try
+            {
+                var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
+                ChatDAO chatDAO = new ChatDAO();
+                objMessage = chatDAO.selectMessages(id);
+                room1.id_room = id;
 
-            var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
-            room1.second_user_id = person.id;
-            room1.first_user_id = itenDAO.selectItenOwner(id);
-
-            // Checar se já existe um room com esses usuários neste item e retornar o número do room
-            ChatDAO chatDAO = new ChatDAO();
-            room1.id_room = Int32.Parse(chatDAO.insert(room1, id).ToString());
-            objMessage = chatDAO.selectMessages(room1.id_room);
-            var tuple = Tuple.Create(room1, person, objMessage);
-            return View(tuple);
+                var tuple = Tuple.Create(person, objMessage, room1);
+                return View(tuple);
+            }
+            catch
+            {
+                return this.RedirectToAction("Login", "Student");
+            }
         }
 
         [HttpPost]
         public IActionResult Insert(Message messageobj)
         {
             ChatDAO chatDAO = new ChatDAO();
-            var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
-            int iten_id = chatDAO.insertMessage(messageobj);
-            //Inserir mensagem
 
-            return RedirectToAction("Index", new { @id = iten_id });
+            try
+            {
+                var person = JsonConvert.DeserializeObject<Person>(HttpContext.Session.GetString("StudentSession"));
+                return new EmptyResult();
+            }
+            catch
+            {
+                return this.RedirectToAction("Login", "Student");
+            }
         }
     }
 }

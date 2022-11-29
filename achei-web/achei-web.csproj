@@ -6,8 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="MySql.Data" Version="8.0.30" />
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
+    <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
+    <PackageReference Include="X.PagedList.Mvc" Version="8.0.7" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.3" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,7 +2,7 @@
     Layout = null;
 }
 
-@model Tuple<achei_web.Models.POJO.Iten, achei_web.Models.POJO.Person>
+@model Tuple<achei_web.Models.POJO.Iten, achei_web.Models.POJO.Person, achei_web.Models.POJO.Room, List<achei_web.Models.POJO.Room>>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,21 +31,29 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="tela_login_aluno.html">Tapt!</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_login_aluno.html">Index</a>
+    <nav class="navbar navbar-expand-sm bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/List/Index">Início</a>
+
+            </li>
+
+        </ul>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Opções
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-user="@Model.Item2.id" asp-action="List">Meus itens</a>
+                        <a class="nav-link" asp-area="" asp-controller="Student" asp-route-id="@Model.Item2.id" asp-action="Update">Editar meu perfil</a>
+                        <a class="nav-link" asp-area="" asp-controller="Iten" asp-route-id="@Model.Item2.id" asp-action="Create">Cadastrar novo item</a>
+                    </div>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_aluno.html">Cadastro aluno</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_cadastro_item.html">Cadastro item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tela_lista_itens.html">Itens</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Logout">Sair</a>
                 </li>
             </ul>
         </div>
@@ -57,9 +65,6 @@
                     <div class="card text-black" style="border-radius: 25px;">
                         <div class="card-body p-md-5">
                             <div class="row justify-content-center">
-
-                                <p>Id do user atual: @Model.Item2.id</p>
-
                                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
                                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">@Model.Item1.name</p>
@@ -84,13 +89,39 @@
 
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <div class="form-outline flex-fill mb-0">
-                                                <span>Status: @Model.Item1.status</span>
+                                                @if (@Model.Item1.status == 1)
+                                                {
+                                                    <span>Status: Encontrado</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Status: Não encontrado</span>
+                                                }
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                            <a type="button" class="btn btn-primary" asp-area="" asp-controller="Chat" asp-route-id="@Model.Item1.id" asp-action="Index">Chat</a>
-                                        </div>
+                                        @{
+                                            if (Model.Item1.person_id == Model.Item2.id)
+                                            {
+
+                                                foreach (var iten in Model.Item4)
+                                                {
+                                                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                                        <a type="button" class="btn btn-secondary" asp-area="" asp-controller="Chat" asp-route-id="@iten.id_room" asp-action="Index">Chat room @iten.id_room</a>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+
+                                        @{
+                                            if (Model.Item1.person_id != Model.Item2.id)
+                                            {
+                                                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                                    <a type="button" class="btn btn-primary" asp-area="" asp-controller="Chat" asp-route-id="@Model.Item3.id_room" asp-action="Index">Iniciar chat</a>
+                                                </div>
+                                            }
+                                        }
+
                                     </form>
                                 </div>
                             </div>
